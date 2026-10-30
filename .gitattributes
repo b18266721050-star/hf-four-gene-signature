@@ -1,0 +1,10 @@
+* text=auto
+*.R   text eol=lf
+*.r   text eol=lf
+*.py  text eol=lf
+*.md  text eol=lf
+*.csv text eol=lf
+*.tsv text eol=lf
+*.pdf binary
+*.xlsx binary
+*.png binary

@@ -1,0 +1,4 @@
+﻿"model","term","beta","se","wald_z","p_value","OR","OR_lower","OR_upper"
+"M1_clinical","Intercept",-3.0558,0.7853,-3.891,9.972e-05,0.0471,0.0101,0.219
+"M1_clinical","age_imp",0.0454,0.0132,3.436,0.0005893,1.05,1.02,1.07
+"M1_clinical","sex=Male",1.2656,0.3186,3.972,7.12e-05,3.55,1.9,6.62

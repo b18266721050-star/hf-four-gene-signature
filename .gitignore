@@ -1,0 +1,40 @@
+# ---- data and heavy intermediates (never commit) ----
+raw_data/
+clean_data/
+_tmp/
+results/
+*.rds
+*.RData
+*.h5ad
+*.h5
+*.vcf
+*.vcf.gz
+*.vcf.gz.tbi
+*.bgen
+*.gz
+*.zip
+
+# ---- large binaries inside figure folders ----
+figures/*.png
+figures/*.tif
+
+# ---- R / Python noise ----
+.Rhistory
+.Rproj.user/
+.Rapp.history
+.Renviron
+renv/library/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# ---- OS / editor ----
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*~
+
+# ---- local logs and temporary outputs ----
+*.log
+_tmp*

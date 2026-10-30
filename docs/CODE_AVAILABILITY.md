@@ -1,0 +1,162 @@
+# Code and data availability
+
+This repository contains the analysis code, derived tables and figure-generating
+scripts for the manuscript on a four-gene expression signature (*AQP3*, *GGT5*,
+*ISLR*, *LAD1*) in human heart failure.
+
+Everything below is described as it exists on the analysis machine; paths are
+resolved through `scripts/00_setup.R`, so the repository can be relocated by
+setting two environment variables (`GEOBULK_ROOT`, `GEOBULK_LIB`).
+
+---
+
+## 1. Repository layout
+
+```
+GEObulk analysis project/
+├── README.md                     project overview (Chinese)
+├── docs/
+│   ├── CODE_AVAILABILITY.md      this file
+│   ├── package_versions.tsv      every R package used, with version and library path
+│   └── package_versions.md       human-readable version of the same table
+├── scripts/
+│   ├── 00_setup.R                single entry point: library path, paths, theme, save helpers
+│   ├── 001_package_versions.R    regenerates docs/package_versions.tsv
+│   ├── 01_…-17_…                 discovery cohort: download, QC, DEG, enrichment, GSEA, WGCNA, ML, nomogram, immune, PPI
+│   ├── 20_…-34_…                 single-cell stage 1: manifest, QC, doublet detection
+│   ├── 40_…-56_…                 single-cell stage 2: merge/normalise/Harmony, clustering, markers, annotation
+│   ├── 60_…-68_…                 single-cell: final annotation, four-gene localisation, Figure 6
+│   ├── 70_…-73_…                 batch diagnostics and ComBat sensitivity analysis
+│   ├── 80_…-83_…                 external validation (three cohorts) and sample-overlap audit
+│   ├── 90_…-96_…                 cell-composition deconvolution and the myeloid-axis analysis
+│   ├── 97_…-101_…                cell-cell communication (CellChat resource, in-house model)
+│   ├── 110_…-116_…               Mendelian randomisation
+│   ├── mr_core.R                 harmonisation + Wald / IVW / Egger / weighted median / Q / LOO / Steiger
+│   └── _dev/                     exploratory probe scripts, not part of the pipeline
+├── clean_data/                   cleaned expression matrices used by the downstream modules
+├── raw_data/                     downloaded source data (see §4; large files not versioned)
+├── results/                      one directory per module: 01_data, 01_tables, 02_figures, 03_logs
+└── report/                       intermediate narrative reports
+```
+
+Every module writes three things: `01_tables/*.{csv,xlsx}`, `02_figures/*.{pdf,png}`
+(PDF vector + 600 dpi PNG) and `03_logs/sessionInfo_*.txt`. The `sessionInfo`
+files are the primary provenance record.
+
+---
+
+## 2. Software
+
+- R 4.6.1 (2026-06-24 ucrt), Windows x86_64-w64-mingw32.
+- Package inventory: `docs/package_versions.tsv` (61 packages referenced by the
+  scripts; see also the per-module `sessionInfo` files).
+- Key packages: limma, sva, WGCNA, glmnet, e1071, randomForest, rms, pROC, GSVA,
+  xCell, EPIC, Seurat 5.5.1, DoubletFinder, ComplexHeatmap, STRINGdb, data.table,
+  ggplot2, patchwork, openxlsx.
+
+`renv` was **not** used, because the analysis machine had no CRAN access.
+`docs/package_versions.tsv` records the exact versions actually used; to convert
+it into a real lockfile on a networked machine run `renv::init(bare = TRUE)`
+followed by `renv::snapshot()`.
+
+One implementation note for reviewers: `TwoSampleMR` could not be installed in
+this environment (no Rtools, and the OpenGWAS API requires a personal JWT), so
+the Mendelian randomisation estimators are implemented explicitly in
+`scripts/mr_core.R` following Bowden et al. (2016). The estimators are:
+harmonisation with strand handling, Wald ratio, inverse-variance weighting
+(fixed and multiplicative random effects), MR-Egger with residual-SD correction
+and intercept test, weighted median with parametric bootstrap standard errors,
+Cochran's Q, leave-one-out and Steiger directionality. The CellChat analysis is
+similarly re-implemented (`scripts/98_sc_cellchat_network.R`) using the official
+CellChatDB resource and the mass-action/Hill model, because CellChat requires a
+C++ toolchain that is unavailable here.
+
+---
+
+## 3. Reproducing the analysis
+
+```r
+# 0. one-time setup
+source("scripts/00_setup.R")     # library path, DIR$, theme_pub(), save_pub(), write_session()
+
+# 1. discovery cohort (GSE57338)
+source("scripts/01_…")           # QC + normalisation
+…                                # run scripts in numeric order; each is self-contained
+source("scripts/69_…")
+
+# 2. sensitivity analyses
+source("scripts/70_batch_diagnosis.R"); source("scripts/71_combat_reanalysis.R")
+
+# 3. external validation
+source("scripts/80_ext_parse.R"); source("scripts/81_ext_validation.R"); source("scripts/82_pack_ext.R")
+
+# 4. single-cell modules (need the 150k-nucleus object, see §4)
+source("scripts/64_sc_fourgene_extract.R"); source("scripts/65_sc_fourgene_plots_donor.R")
+source("scripts/97_sc_cellchat_prep.R");    source("scripts/98_sc_cellchat_network.R")
+
+# 5. Mendelian randomisation
+source("scripts/110_mr_instruments.R"); source("scripts/111_mr_outcome_extract.R")
+#   python scripts/112_mr_ensembl_maf.py
+source("scripts/113_mr_run.R"); source("scripts/114_mr_figures.R"); source("scripts/115_mr_pack.R")
+```
+
+Random seeds are fixed inside each script (20251029, 20261027, 123 for WGCNA,
+20261027 for the train/test split) and are also recorded in the module log files.
+
+---
+
+## 4. Data sources
+
+All data are public. Raw files are **not** committed (they total ~4 GB); the
+table below gives the exact accession and the file each script expects.
+
+| Purpose | Source | Accession / URL | Expected local path |
+| --- | --- | --- | --- |
+| Discovery bulk cohort | GEO | GSE57338 (313 samples; NF 136 / DCM 82 / ICM 95) | `raw_data/GSE57338_series_matrix.txt.gz` |
+| Platform annotation | GEO | GPL11532 | `raw_data/GPL11532.annot.gz` |
+| Single-nucleus cohort | GEO | GSE292067 (25 donors, 150,750 nuclei) | `raw_data/GSE292067/` |
+| External validation 1 | GEO | GSE5406 (+ GPL96 annotation) | `raw_data/external/` |
+| External validation 2 | GEO | GSE116250 (`GSE116250_rpkm.txt.gz`) | `raw_data/external/` |
+| External validation 3 | GEO | GSE55296 (counts + `processed_data_readme.txt`) | `raw_data/external/` |
+| Heart failure GWAS | GWAS Catalog | GCST009541 (HERMES; Shah et al. 2020) | `raw_data/mr/hermes_HF_GCST009541_h.tsv.gz` |
+| Blood cis-eQTL | eQTLGen | `2019-12-11-cis-eQTLsFDR0.05-ProbeLevel-CohortInfoRemoved-BonferroniAdded.txt.gz` | `raw_data/mr/eqtlgen_cis_eqtl_FDR005.txt.gz` |
+| Heart cis-eQTL | GTEx v8 portal API | `Heart_Left_Ventricle`, dataset `gtex_v8` | `raw_data/mr/gtex_hlv_*.json` |
+| Allele frequencies | Ensembl REST | `https://rest.ensembl.org/variation/homo_sapiens` | `results/MR/01_data/T07_snp_maf.csv` |
+| Ligand–receptor resource | CellChat | `CellChatDB.human.rda` (v1) | `raw_data/CellChatDB.human.rda` |
+| PPI network | STRING | v12.5, combined score ≥ 0.4 | queried at run time |
+
+Notes:
+
+- **Do not substitute GSE141910 for an external validation cohort.** It shares
+  the MAGNet heart collection with GSE57338 and overlaps at the sample level.
+- GSE5406 (Penn) may partially overlap GSE57338 at the patient level; this is
+  stated in the Methods and a sensitivity analysis excluding GSE5406 is provided
+  (`results/ExternalValidation/01_tables/T11–T14`, `F09/F10`).
+- eQTLGen and GTEx are used as instruments only; no individual-level data are
+  redistributed here.
+
+---
+
+## 5. Making the code citable
+
+Two options, both free:
+
+1. **GitHub → Zenodo.** Create a public repository, then enable the Zenodo
+   integration (Zenodo → Settings → GitHub), cut a release (e.g. `v1.0.0`), and
+   Zenodo mints a DOI. Cite it in the manuscript as
+   "Code and derived tables are available at https://doi.org/10.5281/zenodo.XXXXXXX".
+2. **Zenodo upload only.** Zip this repository (excluding `raw_data/`) and upload
+   it as a new record; the DOI is generated immediately.
+
+Suggested metadata (`docs/zenodo_metadata.json` is prepared for upload):
+title, authors, description (one paragraph), keywords
+(`heart failure`, `transcriptomics`, `Mendelian randomisation`, `single-nucleus RNA-seq`),
+license `MIT` for code and `CC-BY-4.0` for derived tables.
+
+---
+
+## 6. Licence
+
+Code: MIT. Derived tables and figures: CC-BY-4.0. Source data remain under the
+terms of the original repositories (GEO, GWAS Catalog, eQTLGen, GTEx, Ensembl,
+CellChat).

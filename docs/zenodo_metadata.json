@@ -1,0 +1,28 @@
+{
+  "title": "Analysis code for a four-gene expression signature (AQP3, GGT5, ISLR, LAD1) in human heart failure",
+  "upload_type": "software",
+  "description": "R code, derived tables and figure-generating scripts for a multi-omics analysis of human heart failure: differential expression in GSE57338, WGCNA, three-method machine-learning feature selection, logistic nomogram models, immune deconvolution and cell-composition adjustment, external validation in three independent cohorts (GSE5406, GSE116250, GSE55296), single-nucleus RNA-seq localisation of the four genes (GSE292067), cell-cell communication analysis, and two-sample Mendelian randomisation against the HERMES heart failure GWAS. Every module writes vector PDF and 600 dpi PNG figures, tabular outputs and sessionInfo provenance files.",
+  "creators": [
+    {"name": "TODO: first author", "affiliation": "TODO"},
+    {"name": "TODO: corresponding author", "affiliation": "TODO"}
+  ],
+  "keywords": [
+    "heart failure",
+    "transcriptomics",
+    "dilated cardiomyopathy",
+    "ischemic cardiomyopathy",
+    "single-nucleus RNA sequencing",
+    "Mendelian randomisation",
+    "biomarker"
+  ],
+  "license": "MIT",
+  "access_right": "open",
+  "related_identifiers": [
+    {"identifier": "GSE57338", "relation": "isDerivedFrom", "scheme": "gsex"},
+    {"identifier": "GSE292067", "relation": "isDerivedFrom", "scheme": "gsex"},
+    {"identifier": "GSE5406", "relation": "isDerivedFrom", "scheme": "gsex"},
+    {"identifier": "GSE116250", "relation": "isDerivedFrom", "scheme": "gsex"},
+    {"identifier": "GSE55296", "relation": "isDerivedFrom", "scheme": "gsex"}
+  ],
+  "notes": "Raw public data (GEO, GWAS Catalog GCST009541, eQTLGen, GTEx v8, Ensembl) are not redistributed; download instructions are in docs/CODE_AVAILABILITY.md."
+}

@@ -1,0 +1,6 @@
+M1_clinical: logit(P(HF=1)) = -3.0558 +0.0454*age_imp +1.2656*sex=Male
+M2_gene: logit(P(HF=1)) = +0.0185 -1.4476*AQP3_z -1.4385*GGT5_z +2.1951*ISLR_z -1.1838*LAD1_z
+M3_combined: logit(P(HF=1)) = -6.3552 -2.3250*AQP3_z -1.4536*GGT5_z +2.5051*ISLR_z -1.1793*LAD1_z +0.0984*age_imp +1.7143*sex=Male
+
+注：基因变量均为训练集 z 分数，z = (log2 表达值 - train_mean) / train_sd；
+    z 参数见 T06_zscore_parameters_train_only.csv；年龄缺失以训练集中位数 57 填补。

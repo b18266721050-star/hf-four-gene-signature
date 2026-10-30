@@ -1,0 +1,4 @@
+﻿"model","n_predictors","AIC","logLik","LR_ChiSq","LR_df","LR_p_vs_M2","AUC_train_apparent","Brier_train"
+"M1_clinical",2,276.9,-135.45,,,,0.711,0.2148
+"M2_gene",4,76.36,-33.18,,,,0.986,0.044
+"M3_combined",6,68.29,-27.15,12.067,2,0.002397,0.991,0.0383
