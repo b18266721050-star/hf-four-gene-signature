@@ -1,10 +1,10 @@
-# A four-gene expression signature indexes myocardial remodelling rather than driving heart failure
+# A four-gene expression signature marks the failing myocardium rather than driving heart failure
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23792591.svg)](https://doi.org/10.5281/zenodo.23792591) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 Analysis code, package versions and source data tables for the manuscript:
 
-> **A four-gene expression signature indexes myocardial remodelling rather than driving heart
+> **A four-gene expression signature marks the failing myocardium rather than driving heart
 > failure: a multi-cohort transcriptomic, single-nucleus and Mendelian randomisation study**
 
 This repository contains everything needed to regenerate the tables and figures of the paper from
