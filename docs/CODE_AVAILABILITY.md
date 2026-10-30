@@ -2,8 +2,8 @@
 
 **Repository:** https://github.com/b18266721050-star/hf-four-gene-signature
 **Release:** `v1.0.0`
-**Archived copy:** Zenodo DOI to be inserted here once the release is archived
-(`10.5281/zenodo.XXXXXXX`).
+**Archived copy (v1.0.0):** https://doi.org/10.5281/zenodo.23792592
+**Concept DOI (all versions):** https://doi.org/10.5281/zenodo.23792591
 
 This repository contains the analysis code, the derived tables and the figure-generating
 scripts for the manuscript on a four-gene expression signature (*AQP3*, *GGT5*, *ISLR*,
