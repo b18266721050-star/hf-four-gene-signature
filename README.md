@@ -17,7 +17,7 @@ public data. It does **not** contain the raw expression matrices or the single-n
 
 | Path | Contents |
 | --- | --- |
-| `scripts/` | 110 R / Python scripts, numbered by analysis stage (see below) |
+| `scripts/` | R / Python scripts, numbered by analysis stage (see below) |
 | `docs/package_versions.tsv` | Exact version of every R package used (R 4.6.1, 61 packages recorded) |
 | `docs/CODE_AVAILABILITY.md` | Ready-to-paste data and code availability statement |
 | `docs/zenodo_metadata.json` | Metadata template used for the archived release |
@@ -78,6 +78,7 @@ and logs its `sessionInfo`:
 | `110`–`119` | Mendelian randomisation: instruments, harmonisation, IVW/Egger/weighted median, FinnGen replication, locus pleiotropy |
 | `120`–`123` | Table 1, Figure 1 flow diagram, composite figure assembly |
 | `124`–`135` | colocalisation, SuSiE fine-mapping with the 1000G panel, instrument-specificity and LD relations |
+| `136`–`140` | audit revisions: de-circularised composition adjustment, train-only panel, batch-aware cross-validation, power and compartment checks, Figure 5B legend |
 
 ### Two components that are re-implemented rather than called from a package
 

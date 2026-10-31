@@ -1,8 +1,8 @@
 # Code and data availability
 
 **Repository:** https://github.com/b18266721050-star/hf-four-gene-signature
-**Release:** `v1.0.0`
-**Archived copy (v1.0.0):** https://doi.org/10.5281/zenodo.23792592
+**Release:** `v1.0.1`
+**Archived copy (v1.0.1):** https://doi.org/10.5281/zenodo.23812292
 **Concept DOI (all versions):** https://doi.org/10.5281/zenodo.23792591
 
 This repository contains the analysis code, the derived tables and the figure-generating
@@ -149,10 +149,10 @@ Notes:
 
 ## 5. Making the code citable
 
-The repository is public and tagged `v1.0.0`. To mint a DOI:
+The repository is public and tagged `v1.0.1`. To mint a DOI:
 
 1. Zenodo → Settings → GitHub → enable the switch for `hf-four-gene-signature`;
-2. on GitHub, publish a release from the existing tag `v1.0.0`;
+2. on GitHub, publish a release from the existing tag `v1.0.1`;
 3. Zenodo mints the DOI automatically; insert it at the top of this file and in the
    manuscript's Code availability statement.
 
